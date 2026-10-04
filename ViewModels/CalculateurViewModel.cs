@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace CalculateurAge.ViewModels;
 
 public class CalculateurViewModel : BaseViewModel
@@ -11,6 +13,7 @@ public class CalculateurViewModel : BaseViewModel
     private bool _resultatVisible;
     private string _statutMajorite = "";
     private string _messageAnniversaire = "";
+    private readonly ObservableCollection<string> _historique = new();
 
     // Propriétés publiques : ce que le XAML voit.
     public string Nom
@@ -53,11 +56,17 @@ public class CalculateurViewModel : BaseViewModel
         set => SetField(ref _messageAnniversaire, value);
     }
 
+    // Liste des derniers calculs, du plus récent au plus ancien.
+    public ObservableCollection<string> Historique => _historique;
+
     // Lié à Button.Command dans le XAML.
     public RelayCommand CalculerCommand { get; }
 
     // Remet tous les champs à zéro.
     public RelayCommand EffacerCommand { get; }
+
+    // Vide la liste des derniers calculs.
+    public RelayCommand EffacerHistoriqueCommand { get; }
 
     public CalculateurViewModel()
     {
@@ -65,6 +74,10 @@ public class CalculateurViewModel : BaseViewModel
             Calculer,
             () => !string.IsNullOrWhiteSpace(Nom));
         EffacerCommand = new RelayCommand(Effacer);
+        EffacerHistoriqueCommand = new RelayCommand(
+            () => Historique.Clear(),
+            () => Historique.Count > 0);
+        Historique.CollectionChanged += (_, __) => EffacerHistoriqueCommand.Rafraichir();
     }
 
     // Remet l'écran à zéro, sans toucher à la vue.
@@ -114,8 +127,9 @@ public class CalculateurViewModel : BaseViewModel
             DateTime.Today.AddYears(-age)) age--;
 
         Resultat = $"{Nom}, vous avez {age} ans";
-        StatutMajorite = age >= 18 ? "Majeur" : "Mineur";
+        StatutMajorite = age >= 22 ? "Majeur" : "Mineur";
         MessageAnniversaire = CalculerMessageAnniversaire(DateNaissance);
+        Historique.Insert(0, $"{Nom} — {age} ans ({DateNaissance:dd/MM/yyyy})");
         ResultatVisible = true;
     }
 }

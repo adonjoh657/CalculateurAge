@@ -21,6 +21,20 @@
                    IsVisible="{Binding ResultatVisible}"/>
             <Label Text="{Binding MessageAnniversaire}" FontSize="16"
                    IsVisible="{Binding ResultatVisible}"/>
+            <Label Text="Historique" FontSize="16" FontAttributes="Bold"/>
+            <CollectionView ItemsSource="{Binding Historique}"
+                            MaximumHeightRequest="150">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" FontSize="14"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <Label Text="Aucun calcul pour l'instant" FontSize="14" Opacity="0.6"/>
+                </CollectionView.EmptyView>
+            </CollectionView>
+            <Button Text="Effacer l'historique"
+                    Command="{Binding EffacerHistoriqueCommand}"/>
         </VerticalStackLayout>
     </ScrollView>
 
