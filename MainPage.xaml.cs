@@ -1,24 +1,35 @@
-﻿namespace CalculateurAge
+﻿namespace CalculateurAge;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public MainPage()
     {
-        int count = 0;
+        InitializeComponent();
+    }
 
-        public MainPage()
+    // Gestionnaire appelé au clic du bouton Calculer.
+    // sender = le contrôle cliqué ; e = données de l'événement.
+    private void OnCalculerClicked(object? sender, EventArgs e)
+    {
+        // Validation : on refuse un nom vide.
+        if (string.IsNullOrWhiteSpace(entryNom.Text))
         {
-            InitializeComponent();
+#pragma warning disable CS0618 // DisplayAlert simple du TP (Phase A)
+            DisplayAlert("Erreur", "Entrez un nom", "OK");
+#pragma warning restore CS0618
+            return; // on sort sans rien calculer
         }
 
-        private void OnCounterClicked(object? sender, EventArgs e)
-        {
-            count++;
+        DateTime d = pickerDate.Date ?? DateTime.Today;
+        int age = DateTime.Today.Year - d.Year;
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+        // Si l'anniversaire n'est pas encore passé cette année,
+        // on retire une année.
+        if (d.Date > DateTime.Today.AddYears(-age)) age--;
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
+        // On écrit DIRECTEMENT dans les contrôles : c'est
+        // précisément ce que le MVVM va supprimer.
+        lblResultat.Text = $"{entryNom.Text}, vous avez {age} ans";
+        lblResultat.IsVisible = true;
     }
 }
