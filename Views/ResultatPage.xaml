@@ -6,6 +6,9 @@
 
     <VerticalStackLayout Padding="30" Spacing="16">
         <Label x:Name="lblMessage" FontSize="22"/>
+        <Label x:Name="lblStatut" FontSize="18"/>
+        <Label x:Name="lblAnniversaire" FontSize="16"/>
+        <Label x:Name="lblSigne" FontSize="16"/>
         <Button Text="Retour" Clicked="OnRetourClicked"/>
     </VerticalStackLayout>
 

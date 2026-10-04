@@ -15,12 +15,6 @@
                     Command="{Binding CalculerCommand}"/>
             <Button Text="Effacer"
                     Command="{Binding EffacerCommand}"/>
-            <Label Text="{Binding Resultat}" FontSize="20"
-                   IsVisible="{Binding ResultatVisible}"/>
-            <Label Text="{Binding StatutMajorite}" FontSize="18"
-                   IsVisible="{Binding ResultatVisible}"/>
-            <Label Text="{Binding MessageAnniversaire}" FontSize="16"
-                   IsVisible="{Binding ResultatVisible}"/>
             <Label Text="Historique" FontSize="16" FontAttributes="Bold"/>
             <CollectionView ItemsSource="{Binding Historique}"
                             MaximumHeightRequest="150">
