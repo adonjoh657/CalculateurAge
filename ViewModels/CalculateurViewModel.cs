@@ -10,6 +10,7 @@ public class CalculateurViewModel : BaseViewModel
     private string _resultat = "";
     private bool _resultatVisible;
     private string _statutMajorite = "";
+    private string _messageAnniversaire = "";
 
     // Propriétés publiques : ce que le XAML voit.
     public string Nom
@@ -46,6 +47,12 @@ public class CalculateurViewModel : BaseViewModel
         set => SetField(ref _statutMajorite, value);
     }
 
+    public string MessageAnniversaire
+    {
+        get => _messageAnniversaire;
+        set => SetField(ref _messageAnniversaire, value);
+    }
+
     // Lié à Button.Command dans le XAML.
     public RelayCommand CalculerCommand { get; }
 
@@ -67,7 +74,36 @@ public class CalculateurViewModel : BaseViewModel
         DateNaissance = DateTime.Today.AddYears(-20);
         Resultat = "";
         StatutMajorite = "";
+        MessageAnniversaire = "";
         ResultatVisible = false;
+    }
+
+    // Jours restants avant le prochain anniversaire.
+    private static string CalculerMessageAnniversaire(DateTime naissance)
+    {
+        DateTime aujourdHui = DateTime.Today;
+        int annee = aujourdHui.Year;
+
+        // Cas du 29 février : on fête le 28 février les années non bissextiles.
+        int jour = naissance.Day;
+        int mois = naissance.Month;
+        if (mois == 2 && jour == 29 && !DateTime.IsLeapYear(annee))
+            jour = 28;
+
+        DateTime prochain = new DateTime(annee, mois, jour);
+        if (prochain.Date < aujourdHui.Date)
+        {
+            annee++;
+            jour = naissance.Day;
+            if (mois == 2 && jour == 29 && !DateTime.IsLeapYear(annee))
+                jour = 28;
+            prochain = new DateTime(annee, mois, jour);
+        }
+
+        int jours = (prochain.Date - aujourdHui.Date).Days;
+        return jours == 0
+            ? "Joyeux anniversaire !"
+            : $"Anniversaire dans {jours} jour{(jours > 1 ? "s" : "")}";
     }
 
     // La logique métier : aucun contrôle d'interface ici.
@@ -79,6 +115,7 @@ public class CalculateurViewModel : BaseViewModel
 
         Resultat = $"{Nom}, vous avez {age} ans";
         StatutMajorite = age >= 18 ? "Majeur" : "Mineur";
+        MessageAnniversaire = CalculerMessageAnniversaire(DateNaissance);
         ResultatVisible = true;
     }
 }

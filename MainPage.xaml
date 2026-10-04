@@ -19,6 +19,8 @@
                    IsVisible="{Binding ResultatVisible}"/>
             <Label Text="{Binding StatutMajorite}" FontSize="18"
                    IsVisible="{Binding ResultatVisible}"/>
+            <Label Text="{Binding MessageAnniversaire}" FontSize="16"
+                   IsVisible="{Binding ResultatVisible}"/>
         </VerticalStackLayout>
     </ScrollView>
 
