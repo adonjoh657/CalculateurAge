@@ -11,6 +11,8 @@ namespace CalculateurAge
             // lève une exception "route inconnue".
             Routing.RegisterRoute(nameof(ResultatPage),
                                   typeof(ResultatPage));
+            Routing.RegisterRoute(nameof(HistoriquePage),
+                                  typeof(HistoriquePage));
         }
     }
 }
