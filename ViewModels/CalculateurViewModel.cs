@@ -9,6 +9,7 @@ public class CalculateurViewModel : BaseViewModel
         DateTime.Today.AddYears(-20);
     private string _resultat = "";
     private bool _resultatVisible;
+    private string _statutMajorite = "";
 
     // Propriétés publiques : ce que le XAML voit.
     public string Nom
@@ -39,6 +40,12 @@ public class CalculateurViewModel : BaseViewModel
         set => SetField(ref _resultatVisible, value);
     }
 
+    public string StatutMajorite
+    {
+        get => _statutMajorite;
+        set => SetField(ref _statutMajorite, value);
+    }
+
     // Lié à Button.Command dans le XAML.
     public RelayCommand CalculerCommand { get; }
 
@@ -57,6 +64,7 @@ public class CalculateurViewModel : BaseViewModel
             DateTime.Today.AddYears(-age)) age--;
 
         Resultat = $"{Nom}, vous avez {age} ans";
+        StatutMajorite = age >= 18 ? "Majeur" : "Mineur";
         ResultatVisible = true;
     }
 }
