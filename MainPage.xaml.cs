@@ -1,4 +1,6 @@
-﻿namespace CalculateurAge;
+﻿using CalculateurAge.Views;
+
+namespace CalculateurAge;
 
 public partial class MainPage : ContentPage
 {
@@ -9,14 +11,14 @@ public partial class MainPage : ContentPage
 
     // Gestionnaire appelé au clic du bouton Calculer.
     // sender = le contrôle cliqué ; e = données de l'événement.
-    private void OnCalculerClicked(object? sender, EventArgs e)
+    private async void OnCalculerClicked(object? sender, EventArgs e)
     {
         // Validation : on refuse un nom vide.
         if (string.IsNullOrWhiteSpace(entryNom.Text))
         {
-#pragma warning disable CS0618 // DisplayAlert simple du TP (Phase A)
-            DisplayAlert("Erreur", "Entrez un nom", "OK");
-#pragma warning restore CS0618
+#pragma warning disable CS0618, CS4014 // DisplayAlert simple du TP (Phase A/B)
+            _ = DisplayAlert("Erreur", "Entrez un nom", "OK");
+#pragma warning restore CS0618, CS4014
             return; // on sort sans rien calculer
         }
 
@@ -27,9 +29,8 @@ public partial class MainPage : ContentPage
         // on retire une année.
         if (d.Date > DateTime.Today.AddYears(-age)) age--;
 
-        // On écrit DIRECTEMENT dans les contrôles : c'est
-        // précisément ce que le MVVM va supprimer.
-        lblResultat.Text = $"{entryNom.Text}, vous avez {age} ans";
-        lblResultat.IsVisible = true;
+        // Navigation vers la page résultat avec les paramètres dans l'URL.
+        await Shell.Current.GoToAsync(
+            $"{nameof(ResultatPage)}?nom={Uri.EscapeDataString(entryNom.Text)}&age={age}");
     }
 }
